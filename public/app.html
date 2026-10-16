@@ -1,0 +1,60 @@
+<nav class="main-nav" [class.scrolled]="isScrolled">
+  <div class="nav-container">
+    <div class="brand">
+      <span class="brand-logo">HC</span>
+      <div class="brand-text">
+        <h1>Hope Community Charity</h1>
+        <p>Connecting people to meaningful causes</p>
+      </div>
+    </div>
+    <button class="nav-hamburger" (click)="toggleMenu()" aria-label="Toggle menu">☰</button>
+    <ul class="nav-menu" [class.open]="menuOpen">
+      <li><a routerLink="/" routerLinkActive="active-page" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/search" routerLinkActive="active-page">Search Events</a></li>
+      <li><a routerLink="/about" routerLinkActive="active-page">About Us</a></li>
+      <li><a routerLink="/impact" routerLinkActive="active-page">Our Impact</a></li>
+      <li><a routerLink="/admin" routerLinkActive="active-page">⚙️ Admin Manage Events</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>Hope Community Charity</h4>
+      <p>Supporting vulnerable families across Australia through community fundraising events.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/search">Search Events</a></li>
+        <li><a routerLink="/about">About Us</a></li>
+        <li><a routerLink="/impact">Our Impact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Event Categories</h4>
+      <ul>
+        <li><a routerLink="/search" [queryParams]="{cat_id: 1}">Fun Run</a></li>
+        <li><a routerLink="/search" [queryParams]="{cat_id: 2}">Gala Dinner</a></li>
+        <li><a routerLink="/search" [queryParams]="{cat_id: 3}">Silent Auction</a></li>
+        <li><a routerLink="/search" [queryParams]="{cat_id: 4}">Charity Concert</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <p>📧 contact@hopecommunity.org</p>
+      <p>📞 02‑5555‑1111</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Hope Community Charity — All rights reserved.</p>
+  </div>
+</footer>
+
+<button class="btn-backtop" (click)="backToTop()" title="Back to top" [class.show]="showBackToTop">↑</button>

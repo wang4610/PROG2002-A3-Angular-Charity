@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Detail | Hope Community Charity</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="brand">
+                <span class="brand-logo">HC</span>
+                <div class="brand-text">
+                    <h1>Hope Community Charity</h1>
+                    <p>Connecting people to meaningful causes</p>
+                </div>
+            </div>
+            <button class="nav-hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./search.html">Search Events</a></li>
+                <li><a href="./about.html">About Us</a></li>
+                <li><a href="./impact.html">Our Impact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="breadcrumb"></div>
+    <main class="detail-page">
+        <a href="./index.html" class="btn btn-back">← Back to Home</a>
+        <div id="detail-loading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading event details...</p>
+        </div>
+        <div id="detail-error" style="display:none;">
+            <div class="error-msg">Event not found or has been removed.</div>
+            <a href="./index.html" class="btn btn-primary">Return Home</a>
+        </div>
+        <div id="detail-content" style="display:none;"></div>
+    </main>
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>Hope Community Charity</h4>
+                <p>Supporting vulnerable families across Australia through community fundraising events.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./search.html">Search Events</a></li>
+                    <li><a href="./about.html">About Us</a></li>
+                    <li><a href="./impact.html">Our Impact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <p>📧 contact@hopecommunity.org</p>
+                <p>📞 02‑5555‑1111</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Hope Community Charity — All rights reserved.</p>
+        </div>
+    </footer>
+    <button class="btn-backtop" id="backToTop" title="Back to top">↑</button>
+<script type="module">
+import { fetchSingleEvent } from './js/api.js';
+import {
+    initNavbarScroll, initHamburgerMenu, setBreadcrumb, initLightbox,
+    initBackToTop, showToast
+} from './js/ui-components.js';
+const loadingEl = document.querySelector("#detail-loading");
+const errorEl = document.querySelector("#detail-error");
+const contentEl = document.querySelector("#detail-content");
+const urlParams = new URLSearchParams(window.location.search);
+const eventId = urlParams.get('eventId');
+window.addEventListener("DOMContentLoaded", async () => {
+    initNavbarScroll();
+    initHamburgerMenu();
+    initBackToTop();
+    if (!eventId) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        setBreadcrumb([
+            { text: "Home", link: "./index.html" },
+            { text: "Event Detail (Invalid)" }
+        ]);
+        return;
+    }
+    try {
+        const resp = await fetchSingleEvent(eventId);
+        loadingEl.style.display = 'none';
+        if (!resp.success) {
+            errorEl.style.display = 'block';
+            setBreadcrumb([
+                { text: "Home", link: "./index.html" },
+                { text: "Event Not Found" }
+            ]);
+            return;
+        }
+        renderDetail(resp.data);
+        initLightbox();
+        setBreadcrumb([
+            { text: "Home", link: "./index.html" },
+            { text: "Search Events", link: "./search.html" },
+            { text: resp.data.event_name }
+        ]);
+    } catch (err) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        showToast("error", "Failed fetch event data");
+    }
+});
+function renderDetail(ev) {
+    contentEl.style.display = 'block';
+    const statusBadge = ev.event_status === 'upcoming'
+        ? `<span class="status-badge upcoming">Upcoming Event</span>`
+        : `<span class="status-badge completed">Past Event</span>`;
+    const isPast = ev.event_status === 'past';
+    contentEl.innerHTML = `
+    <div class="detail-container">
+        <div class="detail-hero">
+            <img src="${ev.event_image_url}" alt="${ev.event_name}" data-lightbox>
+            <div class="detail-hero-badge">
+                ${statusBadge}
+                <span class="event-category-tag">${ev.cat_name}</span>
+            </div>
+        </div>
+        <div class="detail-body">
+            <div class="detail-title-row">
+                <h1>${ev.event_name}</h1>
+                <span class="price-tag">${ev.ticket_price>0?"AUD $"+ev.ticket_price.toFixed(2):"FREE Entry"}</span>
+            </div>
+            <p class="detail-lead"><strong>Host Organisation:</strong> ${ev.org_name}</p>
+            <hr>
+            <div class="detail-grid">
+                <div class="meta-box">
+                    <h4>📅 Date & Time</h4>
+                    <p>${new Date(ev.event_date).toLocaleString()}</p>
+                </div>
+                <div class="meta-box">
+                    <h4>📍 Location</h4>
+                    <p>${ev.location}</p>
+                </div>
+                <div class="meta-box">
+                    <h4>🎟 Ticket Price</h4>
+                    <p>${ev.ticket_price>0?"$"+ev.ticket_price.toFixed(2):"Free, donations welcome"}</p>
+                </div>
+                <div class="meta-box">
+                    <h4>📂 Category</h4>
+                    <p>${ev.cat_name}</p>
+                </div>
+            </div>
+            <div class="progress-card">
+                <h4>🎯 Fundraising Progress</h4>
+                <div class="progress-stats">
+                    <span>Fundraising Goal: $${ev.charity_goal_amount.toFixed(2)}</span>
+                    <span>Amount Raised: $${ev.current_raised.toFixed(2)} (${ev.progress_percent}%)</span>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-bar" style="width:${ev.progress_percent}%"></div>
+                </div>
+            </div>
+            <h3>Full Event Description</h3>
+            <p>${ev.event_full_description}</p>
+            <h3>What You Can Expect</h3>
+            <ul class="detail-rules-list">
+                <li>✨ Meet volunteers and other charity‑minded community members</li>
+                <li>✨ Learn how your participation supports local vulnerable groups</li>
+                <li>✨ Receive updates about where your donation will be used</li>
+            </ul>
+            <h3>Event Information & Important Rules</h3>
+            <ul class="detail-rules-list">
+                <li>✅ All ticket proceeds support local community charity programs</li>
+                <li>✅ Please arrive 30 minutes before event start time</li>
+                <li>✅ Online registration is required for participation</li>
+                <li>✅ Photos may be taken during the event for charity promotion</li>
+                <li>✅ Refunds available up to 7 days before event date</li>
+                <li>✅ Children under 16 must come with a parent or guardian</li>
+                <li>✅ Please follow on‑site staff instructions during the activity</li>
+            </ul>
+            <h3>Host Organisation Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <p><strong>Organisation Mission</strong></p>
+                    <p>${ev.mission}</p>
+                </div>
+                <div class="info-item">
+                    <p><strong>Contact Information</strong></p>
+                    <p>${ev.contact_email} | ${ev.contact_phone}</p>
+                </div>
+            </div>
+            <button class="btn-register" ${isPast ? 'disabled' : ''}>
+                ${isPast ? 'Event Finished' : 'Register Participation'}
+            </button>
+        </div>
+    </div>
+    `;
+}
+</script>
+</body>
+</html>
