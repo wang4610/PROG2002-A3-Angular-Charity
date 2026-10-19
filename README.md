@@ -1,106 +1,101 @@
-# 🎯 慈善活动网站项目说明
-
-## 📋 项目简介
-这是一个完整的慈善活动平台，用户可以浏览活动、搜索活动、报名参加活动，管理员可以对活动进行增删改查。
+好的！我给你翻译成英文版的README：
 
 ---
 
-## 🛠 技术栈
-- **前端**：Angular 22.2.0
-- **后端**：Node.js + Express
-- **数据库**：MySQL
-- **部署**：cPanel
+# 🎯 Charity Event Website Project README
+## 📋 Project Introduction
+This is a complete charity event platform. Users can browse events, search for events, and register to attend events. Administrators can perform full CRUD (create, read, update, delete) operations on charity events.
 
 ---
+## 🛠 Tech Stack
+- **Frontend**: Angular 22.2.0
+- **Backend**: Node.js + Express
+- **Database**: MySQL
+- **Deployment**: SCU cPanel
 
-## 🖥 本地运行步骤
-
-### 1. 环境准备
-确保电脑上已安装：
-- Node.js (v18 或以上)
+---
+## 🖥 Local Setup Instructions
+### 1. Prerequisites
+Make sure these are installed on your computer:
+- Node.js (v18 or above)
 - MySQL
 - Angular CLI (`npm install -g @angular/cli`)
 
-### 2. 数据库准备
-1. 打开 MySQL，创建数据库：`charityevents_db`
-2. 导入 `charityevents_db.sql` 文件到这个数据库
-3. 确认用户名密码：默认是 `root` / 你的本地密码
+### 2. Database Setup
+1. Open MySQL, create a new database named: `charityevents_db`
+2. Import the `charityevents_db.sql` file into this database
+3. Confirm your local MySQL username and password (default username: `root`, use your local password)
 
-### 3. 后端启动
+### 3. Start Backend
 ```bash
 cd charity-event-backend
 npm install
-# 修改 server.js 里的本地数据库密码（如果和你本地不一样）
+# Edit the database password in server.js if it does not match your local MySQL password
 node server.js
 ```
-后端会运行在 `http://localhost:3000`
+The backend API will run at `[http://localhost:3000](http://localhost:3000)`
 
-### 4. 前端启动
+### 4. Start Frontend
 ```bash
 cd charity-app
 npm install
 ng serve
 ```
-前端会运行在 `http://localhost:4200`
+The frontend website will run at `[http://localhost:4200](http://localhost:4200)`
 
 ---
+## 🚀 cPanel Deployment Guide
+### 1. Database Deployment
+1. Log in to cPanel, open MySQL Databases
+2. Create a new database: `your_username_charityevents`
+3. Create a new database user, set a secure password
+4. Add the user to the database, grant ALL PRIVILEGES
+5. Open phpMyAdmin, import the `charityevents_db.sql` file
+   *Important: Remove the `CREATE DATABASE` line from the top of the SQL file before importing, otherwise it will throw an error.*
 
-## 🚀 cPanel 部署步骤
+### 2. Backend Deployment
+1. Open cPanel File Manager
+2. Create a folder named `charity-api` under `/home/your_username/`
+3. Upload all files from `charity-event-backend` (exclude the `node_modules` folder) to this directory
+4. Open Setup Node.js App in cPanel
+5. Create a new Node.js application:
+   - App URI: `your_domain/charity-api`
+   - App Root Directory: `/home/your_username/charity-api`
+   - Node.js version: v18
+   - Application mode: production
+6. In the application settings page, run `npm install`
+7. **Critical**: Edit the database config in `server.js` to match your cPanel database username, password, and database name.
 
-### 1. 数据库部署
-1. 登录 cPanel，打开 MySQL Databases
-2. 创建数据库：`你的用户名_charityevents`
-3. 创建数据库用户，设置密码
-4. 把用户添加到数据库，授予所有权限
-5. 打开 phpMyAdmin，导入 `charityevents_db.sql`（注意：导入前要先删掉 SQL 文件开头的 `CREATE DATABASE` 语句，否则会报错）
-
-### 2. 后端部署
-1. 打开 cPanel File Manager
-2. 在 `/home/你的用户名/` 下创建文件夹 `charity-api`
-3. 把 `charity-event-backend` 里的所有文件（除了 node_modules）上传到这个文件夹
-4. 打开 cPanel 的 Setup Node.js App
-5. 创建 Node.js 应用：
-   - App URI：`你的域名/charity-api`
-   - App Root Directory：`/home/你的用户名/charity-api`
-   - Node.js version：v18
-   - Application mode：production
-6. 在应用设置里，运行 `npm install`
-7. **重要**：修改 `server.js` 里的数据库配置，改成你自己的 cPanel 数据库用户名、密码、数据库名
-
-### 3. 前端部署
-1. 本地构建前端：
+### 3. Frontend Deployment
+1. Build the frontend locally:
 ```bash
 cd charity-app
 ng build
 ```
-2. 把 `dist/charity-app/browser/` 里的所有文件上传到 `public_html` 目录
-3. 把 `.htaccess` 文件也上传到 `public_html` 根目录
+2. Upload all files from `dist/charity-app/browser/` to the `public_html` directory
+3. Upload the `.htaccess` file to the root of `public_html`
 
-### 4. 重启应用
-回到 Node.js 应用管理页面，点击 Restart 按钮重启后端应用
-
----
-
-## ✅ 验证部署
-打开 `https://你的域名/`，应该能看到：
-- 首页统计数字正常显示（不是 0）
-- 导航栏所有页面都能正常跳转
-- Admin 管理页面能看到活动列表
+### 4. Restart Application
+Go back to the Node.js application management page, click Restart to apply changes.
 
 ---
-
-## ⚠️ 常见问题
-
-### 1. 首页统计数字全是 0
-- 检查后端数据库连接是否正常
-- 检查浏览器控制台 Network 里的 API 请求是否返回 200
-
-### 2. 直接访问 /admin 页面显示 404
-- 检查 `.htaccess` 文件是否正确上传到 public_html 根目录
-
-### 3. 图片加载慢
-- 我们用的是 unsplash 的外部图片，国内网络加载慢是正常的，不是代码问题
+## ✅ Verify Deployment
+Open `https://your_domain/` in your browser:
+- The statistics numbers on the home page should display correctly (not all 0)
+- All navigation links should work properly
+- The Admin page should load the event list correctly
 
 ---
+## ⚠️ Troubleshooting
+### 1. Statistics numbers on home page all show 0
+- Check if the backend database connection works correctly
+- Check the browser DevTools Network tab to confirm API requests return 200 status
 
-## 📞 有问题随时问队友！
+### 2. Visiting /admin page directly returns 404
+- Check if the `.htaccess` file is uploaded correctly to the root of `public_html`
+
+### 3. Images load slowly
+- We use external images from Unsplash. Slow loading is normal due to network latency, it is not a code issue.
+
+---
+## 📞 Contact your teammate if you have any questions!
