@@ -1,0 +1,83 @@
+<section class="event-detail-hero" *ngIf="event" style="position: relative; height: 350px; overflow: hidden;">
+  <div class="event-detail-hero-img" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+    <img [src]="event.imageUrl || event.image_url || 'https://picsum.photos/seed/' + (event.event_id || event.id) + '-' + (event.title || 'event') + '/1200/500'" [alt]="event.title" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" (error)="$event.target.src='https://picsum.photos/seed/charity' + (event.event_id || event.id) + '/1200/500'">
+  </div>
+  <div class="event-detail-hero-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));"></div>
+  <div class="event-detail-hero-content" style="position: relative; z-index: 2; padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; color: white; padding-top: 120px;">
+    <span class="event-cat-badge" style="background: rgba(255,255,255,0.2); padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.9rem;">{{ event.category }}</span>
+    <h1 style="font-size: 2.5rem; margin: 1rem 0;">{{ event.title }}</h1>
+    <div class="event-meta-row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 1.1rem;">
+      <span>📅 {{ event.event_date | date:'fullDate' }}</span>
+      <span>📍 {{ event.location }}</span>
+      <span>💰 {{ event.price > 0 ? ('$' + event.price + ' per ticket') : 'Free Entry' }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="event-detail-content" *ngIf="event" style="max-width: 1000px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+  <div class="event-detail-main">
+    <div class="content-card" style="background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem;">
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">About This Event</h3>
+      <p style="color: var(--grey-700); line-height: 1.6;">{{ event.description }}</p>
+      <div class="progress-section" style="margin-top: 1.5rem;">
+        <div class="progress-label" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="font-weight: 600;">Registration Progress</span>
+          <span style="font-weight: 600; color: var(--primary);">{{ event.progress_percent || 0 }}%</span>
+        </div>
+        <div class="progress-bar" style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden;">
+          <div class="progress-fill" [style.width.%]="event.progress_percent || 0" style="background: linear-gradient(90deg, #3498db, #2980b9); height: 100%; transition: width 0.3s;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 天气卡片 -->
+    <div class="content-card weather-card" *ngIf="weather" style="background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem;">
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">🌤️ Weather at Event Location</h3>
+      <div class="weather-info" style="display: flex; align-items: center; gap: 1rem;">
+        <div class="weather-icon" style="font-size: 3rem;">{{ getWeatherIcon(weather.weather_code) }}</div>
+        <div class="weather-data">
+          <p class="temp" style="font-size: 2rem; font-weight: bold; color: var(--primary);">{{ weather.temperature_2m }}°C</p>
+          <p class="humidity" style="color: var(--grey-700);">💧 Humidity: {{ weather.relative_humidity_2m }}%</p>
+          <p class="wind" style="color: var(--grey-700);">💨 Wind: {{ weather.wind_speed_10m }} km/h</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card" style="background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">Registered Attendees</h3>
+      <div *ngIf="registrations.length === 0" class="empty-state" style="text-align: center; padding: 2rem; color: var(--grey-700);">
+        <p>No registrations yet. Be the first to sign up!</p>
+      </div>
+      <div *ngIf="registrations.length > 0" class="registrations-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div *ngFor="let reg of registrations" class="registration-item" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: var(--grey-50); border-radius: 8px; border-left: 4px solid #3498db;">
+          <div class="reg-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3498db, #2980b9); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">{{ reg.full_name?.charAt(0) || reg.user_name?.charAt(0) || 'A' }}</div>
+          <div class="reg-info" style="flex: 1;">
+            <h4 style="margin: 0; color: var(--text-dark);">{{ reg.full_name || reg.user_name }}</h4>
+            <p style="margin: 0.25rem 0 0; color: var(--grey-600); font-size: 0.9rem;">
+              {{ reg.email || reg.user_email }} · {{ reg.phone || reg.user_phone }} · <strong style="color: var(--primary);">{{ reg.ticket_count || reg.num_tickets }} ticket(s)</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-detail-sidebar">
+    <div class="sidebar-card" style="background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem; position: sticky; top: 100px;">
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">Register for This Event</h3>
+      <button class="btn btn-primary btn-full" (click)="goToRegister()" style="width: 100%; padding: 0.75rem; font-size: 1.1rem;">Register Now</button>
+    </div>
+
+    <div class="sidebar-card" *ngIf="event.org_name" style="background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+      <h3 style="color: var(--primary); margin-bottom: 1rem;">Organised By</h3>
+      <div class="org-info" style="text-align: center;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 0.5rem;">{{ event.org_name?.charAt(0) }}</div>
+        <h4 style="margin: 0;">{{ event.org_name }}</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div *ngIf="loading" class="loading-state">
+  <p>Loading event details...</p>
+</div>

@@ -1,0 +1,72 @@
+<section class="registration-hero">
+  <div class="container">
+    <h2>Register for This Event</h2>
+    <p>Fill in your details to secure your spot</p>
+  </div>
+</section>
+
+<section class="registration-content" *ngIf="event">
+  <div style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+    <div class="event-summary-card" style="background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+      <h3 style="color: var(--primary); margin-bottom: 0.5rem;">{{ event.title }}</h3>
+      <p style="color: var(--grey-700); margin-bottom: 1rem;">{{ event.description }}</p>
+      <div class="event-meta" style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: var(--grey-700);">
+        <span>📅 {{ event.event_date | date:'fullDate' }}</span>
+        <span>📍 {{ event.location }}</span>
+        <span>💰 {{ event.price > 0 ? ('$' + event.price + ' per ticket') : 'Free' }}</span>
+      </div>
+    </div>
+
+    <form class="registration-form" (ngSubmit)="onSubmit()" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="full_name" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark);">Full Name *</label>
+        <input type="text" id="full_name" [(ngModel)]="formData.full_name" name="full_name" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark);">Email Address *</label>
+        <input type="email" id="email" [(ngModel)]="formData.email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark);">Phone Number *</label>
+        <input type="tel" id="phone" [(ngModel)]="formData.phone" name="phone" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="ticket_count" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark);">Number of Tickets *</label>
+        <input type="number" id="ticket_count" [(ngModel)]="formData.ticket_count" name="ticket_count" min="1" max="10" required style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="message" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-dark);">Additional Message (Optional)</label>
+        <textarea id="message" [(ngModel)]="formData.message" name="message" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; resize: vertical;"></textarea>
+      </div>
+
+      <div class="form-total" *ngIf="event.price > 0 && formData.ticket_count > 0" style="margin: 1rem 0; padding: 1rem; background: var(--grey-50); border-radius: 6px; text-align: right;">
+        <p>Total Amount: <strong style="color: var(--primary); font-size: 1.2rem;">${{ event.price * formData.ticket_count }}</strong></p>
+      </div>
+
+      <!-- 错误提示 -->
+      <div *ngIf="registrationError" style="margin: 1rem 0; padding: 1rem; background: #ffebee; border: 1px solid #ef5350; border-radius: 6px; color: #c62828;">
+        {{ registrationError }}
+      </div>
+
+      <div class="form-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting" style="flex: 1;">
+          {{ submitting ? 'Submitting...' : 'Complete Registration' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="goBack()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<div class="success-modal" *ngIf="registrationSuccess" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+  <div class="success-modal-content" style="background: #fff; padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 400px;">
+    <div class="success-icon" style="width: 60px; height: 60px; border-radius: 50%; background: #27ae60; color: white; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">✓</div>
+    <h3 style="color: var(--primary); margin-bottom: 1rem;">Registration Successful!</h3>
+    <p style="color: var(--grey-700); margin-bottom: 1.5rem;">Thank you for registering. We look forward to seeing you at the event.</p>
+    <button class="btn btn-primary" (click)="goHome()" style="width: 100%;">Back to Home</button>
+  </div>
+</div>
