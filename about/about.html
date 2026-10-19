@@ -1,0 +1,42 @@
+<div class="breadcrumb">
+  <a routerLink="/">Home</a>
+  <span class="sep">/</span>
+  <span>About Us</span>
+</div>
+<main>
+    <section class="about-hero">
+        <img src="https://picsum.photos/id/1070/1600/500" alt="Our team" data-lightbox>
+    </section>
+    <section class="about-content">
+        <div class="about-grid">
+            <div>
+                <h3>Our Story</h3>
+                <p>Hope For Community was founded in 2018 by a group of local volunteers who wanted to make a tangible difference for people experiencing homelessness and financial hardship. What started as a small community food drive has grown into a nationwide charity that organises annual fun runs, gala dinners, silent auctions and charity concerts.</p>
+                <p>Today, we work with 12 community partners across 6 major Australian cities, and have raised over $1.28 million to support thousands of families and children in need.</p>
+            </div>
+            <img src="https://picsum.photos/id/1073/700/500" alt="Volunteers" data-lightbox>
+        </div>
+        <div class="about-grid">
+            <img src="https://picsum.photos/id/1076/700/500" alt="Community support" data-lightbox>
+            <div>
+                <h3>Our Mission & Values</h3>
+                <p>Our mission is to bring communities together through accessible, welcoming charity events that raise funds and awareness for vulnerable groups. We believe everyone should have access to safe shelter, warm meals, education support and mental health services.</p>
+                <p>Our core values are: compassion, transparency, community partnership, and integrity. 100% of event ticket proceeds and donations go directly to frontline support programs.</p>
+            </div>
+        </div>
+        <div class="section-head">
+            <h3>Meet Our Team</h3>
+            <p>The dedicated people who make every event possible.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card" *ngFor="let member of teamList">
+                <img [src]="member.img" alt="{{member.name}}">
+                <div class="team-card-body">
+                    <h4>{{member.name}}</h4>
+                    <p>{{member.role}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<button class="btn-backtop" id="backToTop" title="Back to top">↑</button>

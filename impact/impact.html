@@ -1,0 +1,44 @@
+<section class="about-hero">
+  <img src="https://picsum.photos/id/1063/1600/500" alt="Our impact">
+</section>
+
+<section class="about-content">
+  <div class="hero-stats" style="grid-template-columns: repeat(4,1fr); margin-bottom: 3rem;">
+    <div class="stat-card" style="background: var(--grey-100); color: var(--text-dark);" *ngFor="let stat of statList">
+      <span class="stat-number" style="color: var(--primary);">{{stat.label.includes('Funds') ? '$' + stat.value.toLocaleString() : stat.value.toLocaleString()}}</span>
+      <span class="stat-label" style="color: var(--grey-700);">{{stat.label}}</span>
+    </div>
+  </div>
+
+  <div class="about-grid">
+    <div>
+      <h3>How Your Donations Are Used</h3>
+      <p>Every dollar raised through our events goes directly to frontline community support programs. We keep our overhead costs low through volunteer support, so over 92% of every donation reaches the people who need it most.</p>
+      <p>Funds are used for emergency shelter, food bank supplies, winter relief kits, youth mental health outreach, and after-school education grants for disadvantaged children.</p>
+    </div>
+    <img src="https://picsum.photos/id/1068/700/500" alt="Food bank">
+  </div>
+
+  <div class="about-grid">
+    <img src="https://picsum.photos/id/1071/700/500" alt="Youth program">
+    <div>
+      <h3>Our Programs</h3>
+      <p><strong>Shelter Support:</strong> We provide temporary accommodation and rental assistance for families at risk of homelessness.</p>
+      <p><strong>Food Bank Network:</strong> We stock local food pantries with fresh produce, pantry staples and baby supplies.</p>
+      <p><strong>Youth Mental Health:</strong> We fund free counselling and outreach programs for at-risk teenagers.</p>
+      <p><strong>Education Grants:</strong> We provide tutoring and school supply grants for children from low-income families.</p>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h3>Community Stories</h3>
+    <p>Real stories from people we've supported.</p>
+  </div>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card" *ngFor="let item of testimonialList">
+      <p class="testimonial-text">{{item.text}}</p>
+      <p style="margin-top:1rem; font-weight:600;">- {{item.name}}, {{item.role}}</p>
+    </div>
+  </div>
+</section>
