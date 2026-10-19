@@ -1,0 +1,40 @@
+<main class="page-container">
+  <div style="max-width:90%; margin: 30px auto; padding:0 24px;">
+    <h2>Admin Event Management</h2>
+    <div [style.color]="msgColor" id="msg" style="margin:1rem 0;">{{msg}}</div>
+    <button class="add-btn" routerLink="/admin/new">➕ Create New Event</button>
+    <table style="width:100%;border-collapse: collapse;margin:1rem 0;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">ID</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Title</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Location</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Date</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Price</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Category ID</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:left;background:#2c7873;color:#fff;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading">
+          <td colspan="7" style="border:1px solid #ccc;padding:10px;">Loading events...</td>
+        </tr>
+        <tr *ngIf="!loading && eventList.length === 0">
+          <td colspan="7" style="border:1px solid #ccc;padding:10px;">No events found</td>
+        </tr>
+        <tr *ngFor="let item of eventList">
+          <td style="border:1px solid #ccc;padding:10px;">{{item.event_id || item.id}}</td>
+          <td style="border:1px solid #ccc;padding:10px;">{{item.title}}</td>
+          <td style="border:1px solid #ccc;padding:10px;">{{item.location}}</td>
+          <td style="border:1px solid #ccc;padding:10px;">{{item.event_date}}</td>
+          <td style="border:1px solid #ccc;padding:10px;">${{item.price}}</td>
+          <td style="border:1px solid #ccc;padding:10px;">{{item.cat_id || item.category_id}}</td>
+          <td style="border:1px solid #ccc;padding:10px;" class="btn-group">
+            <button style="margin:0 4px;padding:6px 10px;cursor:pointer;border:none;border-radius:3px;background:#3498db;color:white;" [routerLink]="['/admin/edit', item.event_id || item.id]">Edit</button>
+            <button style="margin:0 4px;padding:6px 10px;cursor:pointer;border:none;border-radius:3px;background:#e74c3c;color:white;" (click)="deleteItem(item.event_id || item.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

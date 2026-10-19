@@ -1,0 +1,50 @@
+<main class="page-container">
+  <div style="max-width:780px; margin: 30px auto; padding:0 24px;">
+    <h2>Edit Charity Event</h2>
+    <div [style.color]="msgColor" style="margin:1rem 0;">{{msg}}</div>
+    <form (ngSubmit)="onSubmit()">
+      <div style="margin:12px 0;">
+        <label>Title:</label>
+        <input type="text" required [(ngModel)]="formData.title" name="title" style="width:100%;padding:8px;">
+      </div>
+      <div style="margin:12px 0;">
+        <label>Description:</label>
+        <textarea required [(ngModel)]="formData.description" name="description" style="width:100%;padding:8px;height:100px;"></textarea>
+      </div>
+      <div style="margin:12px 0;">
+        <label>Location:</label>
+        <input type="text" required [(ngModel)]="formData.location" name="location" style="width:100%;padding:8px;">
+      </div>
+      <div style="margin:12px 0;">
+        <label>Event Date:</label>
+        <input type="date" required [(ngModel)]="formData.event_date" name="event_date" style="width:100%;padding:8px;">
+      </div>
+      <div style="margin:12px 0;">
+        <label>Price:</label>
+        <input type="number" min="0" required [(ngModel)]="formData.price" name="price" style="width:100%;padding:8px;">
+      </div>
+      <div style="margin:12px 0;">
+        <label>Event Category:</label>
+        <select required [(ngModel)]="formData.cat_id" name="cat_id" style="width:100%;padding:8px;">
+          <option value="">-- Select Category --</option>
+          <option *ngFor="let c of categoryList" [value]="c.id">{{c.name}}</option>
+        </select>
+      </div>
+      <div style="margin:12px 0;">
+        <label>Organisation:</label>
+        <select required [(ngModel)]="formData.org_id" name="org_id" style="width:100%;padding:8px;">
+          <option value="">-- Select Organisation --</option>
+          <option *ngFor="let o of orgList" [value]="o.id">{{o.name}}</option>
+        </select>
+      </div>
+      <div style="margin:12px 0;">
+        <label>Image URL:</label>
+        <input type="text" placeholder="https://..." [(ngModel)]="formData.image_url" name="image_url" style="width:100%;padding:8px;">
+      </div>
+      <div style="margin-top:20px;">
+        <button type="submit" style="padding:10px 20px;background:#2c7873;color:white;border:none;border-radius:4px;cursor:pointer;">Save Changes</button>
+        <button type="button" (click)="goBack()" style="padding:10px 20px;background:#ccc;color:#333;border:none;border-radius:4px;cursor:pointer;margin-left:10px;">Cancel</button>
+      </div>
+    </form>
+  </div>
+</main>
